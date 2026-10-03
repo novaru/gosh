@@ -20,14 +20,22 @@ func main() {
 		args := strings.Split(strings.TrimSpace(input), " ")
 		cmd := strings.ToLower(args[0])
 		switch cmd {
-		case "exit":
+		case EXIT:
 			return
-		case "echo":
+		case ECHO:
 			fmt.Println(strings.TrimPrefix(strings.TrimSpace(input), "echo "))
+		case TYPE:
+			command := strings.TrimPrefix(strings.TrimSpace(input), "type ")
+			switch command {
+			case ECHO, EXIT, TYPE:
+				fmt.Println(command + " is a shell builtin")
+			default:
+				fmt.Println(command + ": not found")
+			}
 		case "":
 			continue
 		default:
-			fmt.Printf("%s: command not found\n", strings.TrimSuffix(cmd, "\n"))
+			fmt.Println(strings.TrimSuffix(cmd, "\n") + ": command not found")
 		}
 	}
 }

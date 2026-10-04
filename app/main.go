@@ -25,11 +25,11 @@ func main() {
 		case EXIT:
 			return
 		case ECHO:
-			fmt.Println(strings.TrimPrefix(input, "echo "))
+			fmt.Println(args)
 		case TYPE:
-			command := strings.TrimPrefix(input, "type ")
-			switch command {
-			case ECHO, EXIT, TYPE:
+			command := args[1]
+			switch args[1] {
+			case ECHO, EXIT, PWD, TYPE:
 				fmt.Println(command + " is a shell builtin")
 			default:
 				path, err := exec.LookPath(command)
@@ -38,6 +38,12 @@ func main() {
 				} else {
 					fmt.Println(command, "is", path)
 				}
+			}
+		case PWD:
+			if path, err := os.Getwd(); err != nil {
+				fmt.Errorf(err.Error())
+			} else {
+				fmt.Println(path)
 			}
 		case "":
 			continue

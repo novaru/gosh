@@ -36,8 +36,8 @@ func main() {
 		case EXIT:
 			return
 		case ECHO:
-			a := strings.TrimPrefix(input, "echo ")
-			fmt.Println(strings.Join(Tokenize(a), " "))
+			arguments := Tokenize(strings.TrimPrefix(input, "echo "))
+			fmt.Println(strings.Join(arguments, " "))
 		case TYPE:
 			command := args[1]
 			switch args[1] {
@@ -63,7 +63,7 @@ func main() {
 			if _, err := exec.LookPath(args[0]); err != nil {
 				fmt.Fprintln(os.Stderr, strings.TrimSuffix(cmd, "\n")+": command not found")
 			} else {
-				arguments := args[1:]
+				arguments := Tokenize(strings.TrimPrefix(input, "echo "))
 				command := exec.Command(args[0], arguments...)
 				var out strings.Builder
 				command.Stdout = &out

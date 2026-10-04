@@ -63,10 +63,12 @@ func main() {
 			if _, err := exec.LookPath(args[0]); err != nil {
 				fmt.Fprintln(os.Stderr, strings.TrimSuffix(cmd, "\n")+": command not found")
 			} else {
-				arguments := Tokenize(strings.TrimPrefix(input, "echo "))
-				command := exec.Command(args[0], arguments...)
+				arguments := Tokenize(strings.TrimPrefix(input, cmd))
+				// fmt.Printf("%q\n", arguments)
+				command := exec.Command(cmd, arguments...)
 				var out strings.Builder
 				command.Stdout = &out
+				command.Stderr = os.Stderr
 				if err := command.Run(); err != nil {
 					fmt.Fprintln(os.Stderr, err.Error())
 				} else {

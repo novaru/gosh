@@ -20,6 +20,7 @@ const (
 func Tokenize(s string) []string {
 	var results []string
 	var current string
+	var isInsideQuote bool
 	state := NORMAL
 	s += " "
 
@@ -52,12 +53,20 @@ func Tokenize(s string) []string {
 			switch c {
 			case '"':
 				state = NORMAL
+				isInsideQuote = true
+			case '\\':
+				state = LITERAL
 			default:
 				current += string(c)
 			}
 		case LITERAL:
 			current += string(c)
-			state = NORMAL
+			if isInsideQuote {
+				state = DOUBLE_QUOTE
+				isInsideQuote = false
+			} else {
+				state = NORMAL
+			}
 		}
 	}
 

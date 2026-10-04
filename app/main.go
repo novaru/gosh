@@ -9,10 +9,11 @@ import (
 )
 
 func main() {
+	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Print("$ ")
 
-		input, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		input, err := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error reading input: ", input)
@@ -35,7 +36,9 @@ func main() {
 		case EXIT:
 			return
 		case ECHO:
-			fmt.Println(strings.TrimLeft(strings.TrimRight(fmt.Sprint(args[1:]), "]"), "["))
+			a := strings.TrimPrefix(input, "echo ")
+			fmt.Println(Tokenize(a))
+			fmt.Println(strings.Join(Tokenize(a), " "))
 		case TYPE:
 			command := args[1]
 			switch args[1] {

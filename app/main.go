@@ -20,8 +20,10 @@ func main() {
 			os.Exit(1)
 		}
 
-		args := strings.Split(input, " ")
-		cmd := strings.ToLower(args[0])
+		// args := strings.Split(input, " ")
+		// cmd := strings.ToLower(args[0])
+		args := Tokenize(input)
+		cmd := args[0]
 		switch cmd {
 		case CD:
 			var path string
@@ -60,12 +62,10 @@ func main() {
 		case "":
 			continue
 		default:
-			if _, err := exec.LookPath(args[0]); err != nil {
+			if _, err := exec.LookPath(cmd); err != nil {
 				fmt.Fprintln(os.Stderr, strings.TrimSuffix(cmd, "\n")+": command not found")
 			} else {
-				arguments := Tokenize(strings.TrimPrefix(input, cmd))
-				// fmt.Printf("%q\n", arguments)
-				command := exec.Command(cmd, arguments...)
+				command := exec.Command(cmd, args[1:]...)
 				var out strings.Builder
 				command.Stdout = &out
 				command.Stderr = os.Stderr

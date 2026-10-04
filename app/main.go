@@ -25,7 +25,7 @@ func main() {
 		case EXIT:
 			return
 		case ECHO:
-			fmt.Println(args)
+			fmt.Println(strings.TrimLeft(strings.TrimRight(fmt.Sprint(args[1:]), "]"), "["))
 		case TYPE:
 			command := args[1]
 			switch args[1] {

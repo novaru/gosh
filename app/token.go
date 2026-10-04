@@ -56,6 +56,7 @@ func Tokenize(s string) []string {
 				state = NORMAL
 			case '\\':
 				state = LITERAL
+				isInsideQuote = true
 			default:
 				current += string(c)
 			}

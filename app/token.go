@@ -34,6 +34,7 @@ func Tokenize(s string) []string {
 				state = QUOTE
 			case '"':
 				state = DOUBLE_QUOTE
+				isInsideQuote = true
 			case ' ':
 				if current != "" {
 					results = append(results, current)
@@ -53,7 +54,6 @@ func Tokenize(s string) []string {
 			switch c {
 			case '"':
 				state = NORMAL
-				isInsideQuote = true
 			case '\\':
 				state = LITERAL
 			default:

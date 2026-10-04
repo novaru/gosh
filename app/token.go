@@ -14,6 +14,7 @@ const (
 	NORMAL LexerState = iota
 	QUOTE
 	DOUBLE_QUOTE
+	LITERAL
 )
 
 func Tokenize(s string) []string {
@@ -26,6 +27,8 @@ func Tokenize(s string) []string {
 		switch state {
 		case NORMAL:
 			switch c {
+			case '\\':
+				state = LITERAL
 			case '\'':
 				state = QUOTE
 			case '"':
@@ -52,6 +55,9 @@ func Tokenize(s string) []string {
 			default:
 				current += string(c)
 			}
+		case LITERAL:
+			current += string(c)
+			state = NORMAL
 		}
 	}
 

@@ -13,15 +13,25 @@ func main() {
 		fmt.Print("$ ")
 
 		input, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		input = strings.TrimSpace(input)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error reading input: ", input)
 			os.Exit(1)
 		}
-		input = strings.TrimSpace(input)
 
 		args := strings.Split(input, " ")
 		cmd := strings.ToLower(args[0])
 		switch cmd {
+		case CD:
+			var path string
+			if len(args) == 1 {
+				path = os.Getenv("HOME")
+			} else {
+				path = args[1]
+			}
+			if err := os.Chdir(path); err != nil {
+				fmt.Fprintf(os.Stderr, "cd: %s: No such file or directory\n", args[1])
+			}
 		case EXIT:
 			return
 		case ECHO:
@@ -49,14 +59,14 @@ func main() {
 			continue
 		default:
 			if _, err := exec.LookPath(args[0]); err != nil {
-				fmt.Println(strings.TrimSuffix(cmd, "\n") + ": command not found")
+				fmt.Fprintln(os.Stderr, strings.TrimSuffix(cmd, "\n")+": command not found")
 			} else {
 				arguments := args[1:]
 				command := exec.Command(args[0], arguments...)
 				var out strings.Builder
 				command.Stdout = &out
 				if err := command.Run(); err != nil {
-					fmt.Errorf(err.Error())
+					fmt.Fprintln(os.Stderr, err.Error())
 				} else {
 					fmt.Print(out.String())
 				}

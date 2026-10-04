@@ -37,7 +37,6 @@ func main() {
 			return
 		case ECHO:
 			a := strings.TrimPrefix(input, "echo ")
-			fmt.Println(Tokenize(a))
 			fmt.Println(strings.Join(Tokenize(a), " "))
 		case TYPE:
 			command := args[1]

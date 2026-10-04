@@ -24,7 +24,7 @@ func main() {
 		switch cmd {
 		case CD:
 			var path string
-			if len(args) == 1 {
+			if len(args) == 1 || args[1] == "~" {
 				path = os.Getenv("HOME")
 			} else {
 				path = args[1]
